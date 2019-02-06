@@ -3,7 +3,15 @@ require "active_record/errors/localize"
 require 'active_record'
 require 'i18n'
 require 'pry'
-I18n.load_path << Dir[File.expand_path("config/locales_samples") + "/*.yml"]
+require 'nulldb_rspec'
+include NullDB::RSpec::NullifiedDatabase
+
+NullDB.configure do |c|
+  c.project_root = File.expand_path("#{__FILE__}/..")
+end
+ActiveRecord::Base.configurations.merge!('test' =>  { adapter: 'nulldb' })
+
+I18n.load_path << Dir[File.expand_path("config/locales_examples") + "/*.yml"]
 I18n.default_locale = :ja
 
 RSpec.configure do |config|
