@@ -19,7 +19,7 @@ RSpec.describe ActiveRecord::Errors::Localize do
         'activerecord.errors.messages.record_not_found',
         model: name.constantize.model_name.human
       )
-      expect(e.full_message).to eq(localized_message)
+      expect(e.i18n_message).to eq(localized_message)
     end
   end
 
@@ -35,7 +35,7 @@ RSpec.describe ActiveRecord::Errors::Localize do
         'activerecord.errors.messages.record_not_saved',
         record: record.model_name.human
       )
-      expect(e.full_message).to eq(localized_message)
+      expect(e.i18n_message).to eq(localized_message)
     end
   end
 
@@ -48,7 +48,7 @@ RSpec.describe ActiveRecord::Errors::Localize do
         'activerecord.errors.messages.record_not_destroyed',
         record: record.model_name.human
       )
-      expect(e.full_message).to eq(localized_message)
+      expect(e.i18n_message).to eq(localized_message)
     end
   end
 end

@@ -12,13 +12,13 @@ module ErrorHandler
   included do
     # ... other rescue_from
     rescue_from ActiveRecord::RecordNotFound do |e|
-      render json: { error_message: e.full_message }, status: :not_found
+      render json: { error_message: e.i18n_message }, status: :not_found
     end
     rescue_from ActiveRecord::RecordNotSaved do |e|
-      render json: { error_message: e.full_message }, status: :bad_request
+      render json: { error_message: e.i18n_message }, status: :bad_request
     end
     rescue_from ActiveRecord::RecordNotDestroyed do |e|
-      render json: { error_message: e.full_message }, status: :bad_request
+      render json: { error_message: e.i18n_message }, status: :bad_request
     end
     # ... other rescue_from
   end

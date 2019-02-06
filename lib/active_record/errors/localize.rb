@@ -18,7 +18,7 @@ module ActiveRecord
         end
       end
       refine RecordNotFound do
-        def full_message
+        def i18n_message
           I18n.t(
             "activerecord.errors.messages.#{error_under_scored_name}",
             model: model.constantize.model_name.human,
@@ -29,7 +29,7 @@ module ActiveRecord
       end
 
       refine RecordNotSaved do
-        def full_message
+        def i18n_message
           I18n.t(
             "activerecord.errors.messages.#{error_under_scored_name}",
             record: record.model_name.human,
@@ -39,7 +39,7 @@ module ActiveRecord
       end
 
       refine RecordNotDestroyed do
-        def full_message
+        def i18n_message
           I18n.t(
             "activerecord.errors.messages.#{error_under_scored_name}",
             record: record.model_name.human,
