@@ -1,6 +1,5 @@
 require 'spec_helper'
 using ActiveRecord::Errors::Localize
-
 RSpec.describe ActiveRecord::Errors::Localize do
   before do
     class User < ActiveRecord::Base
@@ -41,6 +40,15 @@ RSpec.describe ActiveRecord::Errors::Localize do
   end
 
   describe 'RecordNotDestroyed' do
-    
+    let(:record) { User.new }
+    it 'Return localized error message' do
+      raise ActiveRecord::RecordNotDestroyed.new('Failed to destroy the record', record)
+    rescue ActiveRecord::RecordNotDestroyed => e
+      localized_message = I18n.t(
+        'activerecord.errors.messages.record_not_destroyed',
+        record: record.model_name.human
+      )
+      expect(e.full_message).to eq(localized_message)
+    end
   end
 end

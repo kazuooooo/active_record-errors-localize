@@ -27,6 +27,17 @@ module ActiveRecord
           I18n.t(
             "activerecord.errors.messages.#{error_under_scored_name}",
             record: record.model_name.human,
+            errors: record.errors.full_messages.join(', ')
+          )
+        end
+      end
+
+      refine RecordNotDestroyed do
+        def full_message
+          I18n.t(
+            "activerecord.errors.messages.#{error_under_scored_name}",
+            record: record.model_name.human,
+            errors: record.errors.full_messages.join(', ')
           )
         end
       end
