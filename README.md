@@ -1,8 +1,36 @@
 # ActiveRecord::Errors::Localize
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/active_record/errors/localize`. To experiment with that code, run `bin/console` for an interactive prompt.
+Localize & Customize ActiveRecord Error messages to show user.
 
-TODO: Delete this and the text above, and describe your gem
+## Motivation
+In default,  [ActiveRecord Errors can not be localized](https://github.com/rails/rails/issues/35147) other than [ActiveRecord::RecordInvalid](https://github.com/rails/rails/blob/master/activerecord/lib/active_record/validations.rb#L22)
+
+```ruby
+begin
+  User.find(0)
+rescue ActiveRecord::RecordNotFound => e
+  p(e.message) # => "Couldn't find User with 'id'=0" This message is static and can not change and localize
+end
+```
+
+Most of cases, it's no problem ActiveRecord Error messages are only english,
+but in some cases like error handler below, it needs localization.
+
+```ruby
+module ErrorHandler
+  extend ActiveSupport::Concern
+  included do
+    # ... other rescue_from
+    rescue_from ActiveRecord::RecordNotFound do |e|
+	  # this error message is showed to user, need to localize.
+      render json: { error_message: e.message }, status: :not_found
+    end
+	# ...
+  end
+end
+```
+
+By using this gem, you can use solve this problem in simple way :)
 
 ## Installation
 
@@ -22,7 +50,49 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+First, add localization data to i18n localization file.
+Add key of {lang}.activerecord.errors.messges.{underscored_error_class_name}
+
+Customize example
+```yaml:en.yaml
+en:
+  activerecord:
+    models:
+      user: User
+    errors:
+      messages:
+        record_not_found: "Sorry, We can't find your %{model} ID: %{id}  PrimaryKey: %{primary_key}" # => Sorry, We can't find your User ID: 1  PrimaryKey: id
+        record_not_saved: "%{record} is not saved reason: %{errors}" # => User is not saved reason: xxxxx
+        record_not_destroyed: "%{record} is not deleted reason: %{errors}" # => User is not deleted reason: yyyyy
+```
+
+Localize example
+```yaml:ja.yaml
+ja:
+  activerecord:
+    models:
+      user: ユーザー
+    errors:
+      messages:
+        record_not_found: "%{model}が見つかりません。" #=> ユーザーが見つかりません。
+        record_not_saved: "%{record}が保存されませんでした。" #=> ユーザーが保存されませんでした。
+        record_not_destroyed: "%{record}が削除されませんでした。" #=> ユーザーが削除されませんでした。
+```
+
+Now, you can use #i18n_message method like this.
+
+```ruby
+# Need to write using cuz implemented by refinements
+using ActiveRecord::Errors::Localize
+begin
+  User.find(0)
+rescue ActiveRecord::RecordNotFound => e
+  # Can get localized message by #i18n_message
+  p(e.i18n_message) # => "ユーザーが見つかりません。" 
+end
+```
+
+You can see more practical error handler usage in [this example](https://github.com/kazuooooo/active_record-errors-localize/blob/master/examples/error_handler.rb)
 
 ## Development
 
