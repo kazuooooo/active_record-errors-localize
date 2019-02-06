@@ -16,6 +16,10 @@ module ActiveRecord
         def error_under_scored_name
           self.class.name.demodulize.underscore
         end
+        # default
+        def i18n_message
+          I18n.t("activerecord.errors.messages.#{error_under_scored_name}")
+        end
       end
       refine RecordNotFound do
         def i18n_message

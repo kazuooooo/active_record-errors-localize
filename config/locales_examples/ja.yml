@@ -4,8 +4,7 @@ ja:
       user: ユーザー
     errors:
       messages:
+        connection_not_established: "接続できませんでした。"
         record_not_found: "%{model}が見つかりません。"
         record_not_saved: "%{record}が保存されませんでした。"
         record_not_destroyed: "%{record}が削除されませんでした。"
-
-

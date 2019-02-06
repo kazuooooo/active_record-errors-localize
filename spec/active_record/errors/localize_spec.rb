@@ -5,6 +5,17 @@ RSpec.describe ActiveRecord::Errors::Localize do
     class User < ActiveRecord::Base
     end
   end
+
+  describe 'Default' do
+    it 'Return localized error message' do
+      raise ActiveRecord::ConnectionNotEstablished.new
+    rescue ActiveRecord::ConnectionNotEstablished => e
+      localized_message = I18n.t(
+        'activerecord.errors.messages.connection_not_established'
+      )
+      expect(e.i18n_message).to eq(localized_message)
+    end
+  end
   describe 'RecordNotFound' do
     let(:name) { 'User' }
     let(:primary_key) { 'id' }
