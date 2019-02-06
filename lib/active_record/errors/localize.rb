@@ -3,8 +3,14 @@ require 'active_record'
 require 'active_support'
 require 'i18n'
 require 'pry'
+
 module ActiveRecord
   module Errors
+    # Localize ActiveRcord error messages
+    # Use refinements, cuz do not want to change ActiveRecord behavior as possible.
+    # Intended to use this gem in situation, we need return error message for user.
+    # like exmple @see example.rb
+    # So, implemented only 3 errors which there is posibillity user cause.
     module Localize
       refine ActiveRecordError do
         def error_under_scored_name
