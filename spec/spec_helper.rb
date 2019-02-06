@@ -1,5 +1,10 @@
 require "bundler/setup"
 require "active_record/errors/localize"
+require 'active_record'
+require 'i18n'
+require 'pry'
+I18n.load_path << Dir[File.expand_path("config/locales_samples") + "/*.yml"]
+I18n.default_locale = :ja
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
