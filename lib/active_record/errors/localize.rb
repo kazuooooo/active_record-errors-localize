@@ -6,16 +6,19 @@ require 'pry'
 
 module ActiveRecord
   module Errors
-    # Localize ActiveRcord error messages
-    # Use refinements, cuz do not want to change ActiveRecord behavior as possible.
-    # Intended to use this gem in situation, we need return error message for user.
-    # like exmple @see example.rb
-    # So, implemented only 3 errors which there is posibillity user cause.
+    # Localize ActiveRcord error messages.
+    # It uses refinements, cuz do not want to change ActiveRecord behavior as possible and
+    # Intended to use this gem in rare situation, we need return error message for user.
+    # Like error handler exmple below.
+    # @see example.rb
     module Localize
       refine ActiveRecordError do
+        # Get error class under scored name
+        # to detect which key use for localize.
         def error_under_scored_name
           self.class.name.demodulize.underscore
         end
+
         # default
         def i18n_message
           I18n.t("activerecord.errors.messages.#{error_under_scored_name}")
