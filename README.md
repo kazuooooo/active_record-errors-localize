@@ -22,10 +22,10 @@ module ErrorHandler
   included do
     # ... other rescue_from
     rescue_from ActiveRecord::RecordNotFound do |e|
-	  # this error message is showed to user, need to localize.
+      # this error message is showed to user, need to localize.
       render json: { error_message: e.message }, status: :not_found
     end
-	# ...
+    # ...
   end
 end
 ```
